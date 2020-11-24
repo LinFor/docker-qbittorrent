@@ -25,10 +25,11 @@ RUN set -x \
     # Build lib rasterbar from source code (required by qBittorrent)
     # Until https://github.com/qbittorrent/qBittorrent/issues/6132 is fixed, need to use version 1.0.*
     # NOTE: Currently libtorrent-rasterbar 2.x does not compile.
- #&& LIBTORRENT_RASTERBAR_URL=$(curl -sSL https://api.github.com/repos/arvidn/libtorrent/releases/latest | grep -E 'browser_download_url.*libtorrent-rasterbar'  | head -n 1 | cut -d '"' -f 4) \
- && LIBTORRENT_RASTERBAR_URL=https://github.com/arvidn/libtorrent/releases/download/libtorrent-1.2.10/libtorrent-rasterbar-1.2.10.tar.gz \
+ && LIBTORRENT_RASTERBAR_URL=$(curl -sSL https://api.github.com/repos/arvidn/libtorrent/releases/latest | grep -E 'browser_download_url.*libtorrent-rasterbar'  | head -n 1 | cut -d '"' -f 4) \
+#  && LIBTORRENT_RASTERBAR_URL=https://github.com/arvidn/libtorrent/releases/download/libtorrent-1.2.10/libtorrent-rasterbar-1.2.10.tar.gz \
  && mkdir /tmp/libtorrent-rasterbar \
  && curl -sSL $LIBTORRENT_RASTERBAR_URL | tar xzC /tmp/libtorrent-rasterbar \
+#  && git clone --recurse-submodules https://github.com/arvidn/libtorrent.git /tmp/libtorrent-rasterbar/libtorrent-rasterbar-2.0.0 \
  && cd /tmp/libtorrent-rasterbar/* \
  && mkdir build \
  && cd build \
@@ -41,8 +42,8 @@ RUN set -x \
  && git clone https://github.com/qbittorrent/qBittorrent.git /tmp/qbittorrent \
  && cd /tmp/qbittorrent \
     # Checkout latest release
- && latesttag=$(git describe --tags `git rev-list --tags --max-count=1`) \
- && git checkout $latesttag \
+#  && latesttag=$(git describe --tags `git rev-list --tags --max-count=1`) \
+#  && git checkout $latesttag \
     # Compile
  && ./configure --disable-gui --disable-stacktrace \
  && make \
@@ -55,11 +56,11 @@ RUN set -x \
  && adduser -S -D -u 520 -g 520 -s /sbin/nologin qbittorrent \
     # Create symbolic links to simplify mounting
  && mkdir -p /home/qbittorrent/.config/qBittorrent \
- && mkdir -p /home/qbittorrent/.local/share/data/qBittorrent \
+ && mkdir -p /home/qbittorrent/.local/share/qBittorrent \
  && mkdir /downloads \
  && chmod go+rw -R /home/qbittorrent /downloads \
  && ln -s /home/qbittorrent/.config/qBittorrent /config \
- && ln -s /home/qbittorrent/.local/share/data/qBittorrent /torrents \
+ && ln -s /home/qbittorrent/.local/share/qBittorrent /torrents \
     # Check it works
  && su qbittorrent -s /bin/sh -c 'qbittorrent-nox -v'
 
