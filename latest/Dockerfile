@@ -25,8 +25,8 @@ RUN set -x \
     # Build lib rasterbar from source code (required by qBittorrent)
     # Until https://github.com/qbittorrent/qBittorrent/issues/6132 is fixed, need to use version 1.0.*
     # NOTE: Currently libtorrent-rasterbar 2.x does not compile.
- && LIBTORRENT_RASTERBAR_URL=$(curl -sSL https://api.github.com/repos/arvidn/libtorrent/releases/latest | grep -E 'browser_download_url.*libtorrent-rasterbar'  | head -n 1 | cut -d '"' -f 4) \
-#  && LIBTORRENT_RASTERBAR_URL=https://github.com/arvidn/libtorrent/releases/download/libtorrent-1.2.10/libtorrent-rasterbar-1.2.10.tar.gz \
+#  && LIBTORRENT_RASTERBAR_URL=$(curl -sSL https://api.github.com/repos/arvidn/libtorrent/releases | grep -E 'browser_download_url.*libtorrent-rasterbar-2'  | head -n 1 | cut -d '"' -f 4) \
+ && LIBTORRENT_RASTERBAR_URL=$(curl -sSL https://api.github.com/repos/arvidn/libtorrent/releases | grep -E 'browser_download_url.*libtorrent-rasterbar-1'  | head -n 1 | cut -d '"' -f 4) \
  && mkdir /tmp/libtorrent-rasterbar \
  && curl -sSL $LIBTORRENT_RASTERBAR_URL | tar xzC /tmp/libtorrent-rasterbar \
 #  && git clone --recurse-submodules https://github.com/arvidn/libtorrent.git /tmp/libtorrent-rasterbar/libtorrent-rasterbar-2.0.0 \
